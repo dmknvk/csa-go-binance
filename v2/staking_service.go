@@ -215,3 +215,84 @@ type StakingHistoryTransaction struct {
 	Type        string `json:"type"`
 	Status      string `json:"status"`
 }
+
+// StakingProductsListService fetches the staking product positions
+type StakingProductsListService struct {
+	c       *Client
+	product StakingProduct
+	asset   *string
+	current *int32
+	size    *int32
+}
+
+// Product sets the product parameter.
+func (s *StakingProductsListService) Product(product StakingProduct) *StakingProductsListService {
+	s.product = product
+	return s
+}
+
+// Asset sets the asset parameter.
+func (s *StakingProductsListService) Asset(asset string) *StakingProductsListService {
+	s.asset = &asset
+	return s
+}
+
+// Current sets the current parameter.
+func (s *StakingProductsListService) Current(current int32) *StakingProductsListService {
+	s.current = &current
+	return s
+}
+
+// Size sets the size parameter.
+func (s *StakingProductsListService) Size(size int32) *StakingProductsListService {
+	s.size = &size
+	return s
+}
+
+// Do sends the request.
+func (s *StakingProductsListService) Do(ctx context.Context) (*StakingProducts, error) {
+	r := &request{
+		method:   http.MethodGet,
+		endpoint: "/sapi/v1/staking/productList",
+		secType:  secTypeSigned,
+	}
+	r.setParam("product", s.product)
+	if s.asset != nil {
+		r.setParam("asset", *s.asset)
+	}
+	if s.current != nil {
+		r.setParam("current", *s.current)
+	}
+	if s.size != nil {
+		r.setParam("size", *s.size)
+	}
+	data, err := s.c.callAPI(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	res := new(StakingProducts)
+	err = json.Unmarshal(data, res)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+// StakingProducts represents a list of staking product positions.
+type StakingProducts []StakingProductPosition
+
+// StakingProductPosition represents a staking product position.
+type StakingProductItem struct {
+	ProjectId int64 `json:"projectId"`
+	Detail    struct {
+		Asset       string `json:"asset"`
+		RewardAsset string `json:"rewardAsset"`
+		Duration    int64  `json:"duration"`
+		Renewable   bool   `json:"renewable"`
+		APY         string `json:"apy"`
+	} `json:"detail"`
+	Quota struct {
+		TotalPersonalQuota float64 `json:"totalPersonalQuota"`
+		Minimum            float64 `json:"totalPersonalQuota"`
+	} `json:"quota"`
+}

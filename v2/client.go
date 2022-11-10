@@ -883,6 +883,11 @@ func (c *Client) NewStakingHistoryService() *StakingHistoryService {
 	return &StakingHistoryService{c: c}
 }
 
+// StakingProductsListService init the staking history service
+func (c *Client) StakingProductsListService() *StakingProductsListService {
+	return &StakingProductsListService{c: c}
+}
+
 // NewGetAllLiquidityPoolService init the get all swap pool service
 func (c *Client) NewGetAllLiquidityPoolService() *GetAllLiquidityPoolService {
 	return &GetAllLiquidityPoolService{c: c}
