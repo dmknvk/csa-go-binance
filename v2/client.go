@@ -884,7 +884,7 @@ func (c *Client) NewStakingHistoryService() *StakingHistoryService {
 }
 
 // StakingProductsListService init the staking history service
-func (c *Client) StakingProductsListService() *StakingProductsListService {
+func (c *Client) NewStakingProductsListService() *StakingProductsListService {
 	return &StakingProductsListService{c: c}
 }
 
