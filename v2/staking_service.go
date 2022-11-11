@@ -271,7 +271,7 @@ func (s *StakingProductsListService) Do(ctx context.Context) ([]*StakingProductI
 		return []*StakingProductItem{}, err
 	}
 	res := make([]*StakingProductItem, 0)
-	err = json.Unmarshal(data, res)
+	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return []*StakingProductItem{}, err
 	}
