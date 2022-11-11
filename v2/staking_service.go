@@ -279,11 +279,11 @@ func (s *StakingProductsListService) Do(ctx context.Context) (*StakingProducts, 
 }
 
 // StakingProducts represents a list of staking product positions.
-type StakingProducts []StakingProductPosition
+type StakingProducts []StakingProductItem
 
 // StakingProductPosition represents a staking product position.
 type StakingProductItem struct {
-	ProjectId int64 `json:"projectId"`
+	ProjectId string `json:"projectId"`
 	Detail    struct {
 		Asset       string `json:"asset"`
 		RewardAsset string `json:"rewardAsset"`
@@ -292,7 +292,7 @@ type StakingProductItem struct {
 		APY         string `json:"apy"`
 	} `json:"detail"`
 	Quota struct {
-		TotalPersonalQuota float64 `json:"totalPersonalQuota"`
-		Minimum            float64 `json:"totalPersonalQuota"`
+		TotalPersonalQuota float64 `json:"totalPersonalQuota,string"`
+		Minimum            float64 `json:"minimum,string"`
 	} `json:"quota"`
 }
