@@ -250,7 +250,7 @@ func (s *StakingProductsListService) Size(size int32) *StakingProductsListServic
 }
 
 // Do sends the request.
-func (s *StakingProductsListService) Do(ctx context.Context) (*StakingProducts, error) {
+func (s *StakingProductsListService) Do(ctx context.Context) ([]*StakingProductItem, error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: "/sapi/v1/staking/productList",
@@ -268,18 +268,15 @@ func (s *StakingProductsListService) Do(ctx context.Context) (*StakingProducts, 
 	}
 	data, err := s.c.callAPI(ctx, r)
 	if err != nil {
-		return nil, err
+		return []*StakingProductItem{}, err
 	}
-	res := new(StakingProducts)
+	res := make([]*StakingProductItem, 0)
 	err = json.Unmarshal(data, res)
 	if err != nil {
-		return nil, err
+		return []*StakingProductItem{}, err
 	}
 	return res, nil
 }
-
-// StakingProducts represents a list of staking product positions.
-type StakingProducts []StakingProductItem
 
 // StakingProductPosition represents a staking product position.
 type StakingProductItem struct {
